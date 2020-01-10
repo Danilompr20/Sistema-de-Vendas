@@ -23,7 +23,7 @@ namespace AppVendas.Data
             {
                 return;
             }
-            Departament d1 = new Departament( new int(),"Eletronics");
+            Departament d1 = new Departament(new int(),"Eletronics");
             Departament d2 = new Departament(new int(), "Ferramentas");
 
             Saller s1 = new Saller(new int(), "Danilo", "Danilo@gmail.com", new DateTime(1999, 3, 12), 1234.00, d1);
