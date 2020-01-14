@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using AppVendas.Models;
 using AppVendas.Data;
+using AppVendas.Services;
 
 namespace AppVendas
 {
@@ -40,6 +41,7 @@ namespace AppVendas
             services.AddDbContext<AppVendasContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("AppVendasContext")));
             services.AddScoped<SeedingService>();
+            services.AddScoped<SellerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
