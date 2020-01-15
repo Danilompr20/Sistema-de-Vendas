@@ -5,16 +5,19 @@ using System.Threading.Tasks;
 using AppVendas.Services;
 using Microsoft.AspNetCore.Mvc;
 using AppVendas.Models;
+using AppVendas.Models.ViewModels;
 
 namespace AppVendas.Controllers
 {
     public class SellersController : Controller
     {
         private readonly SellerService _sellerService;
+        private readonly DepartamentService _departamentservice;
 
-        public SellersController(SellerService sellerService)
+        public SellersController(SellerService sellerService,DepartamentService departamentService)
         {
             _sellerService = sellerService;
+            _departamentservice = departamentService;
         }
         public IActionResult Index()
         {
@@ -24,7 +27,9 @@ namespace AppVendas.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var departament = _departamentservice.FindAll();
+            var viewModel = new SellerFormViewModel { Departaments = departament };
+            return View(viewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
