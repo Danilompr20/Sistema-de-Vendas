@@ -24,5 +24,16 @@ namespace AppVendas.Services
             _context.Add(obj);
             _context.SaveChanges();
         }
+        public Saller FindById(int id)
+        {
+            return _context.Saller.FirstOrDefault(x => x.Id == id);
+        }
+
+        public void Remove(int id)
+        {
+            var x = _context.Saller.Find(id);
+            _context.Saller.Remove(x);
+            _context.SaveChanges();
+        }
     }
 }
