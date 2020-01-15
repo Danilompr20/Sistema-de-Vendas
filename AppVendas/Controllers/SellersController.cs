@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AppVendas.Services;
 using Microsoft.AspNetCore.Mvc;
+using AppVendas.Models;
 
 namespace AppVendas.Controllers
 {
@@ -19,6 +20,18 @@ namespace AppVendas.Controllers
         {
             var list = _sellerService.FindAll();
             return View(list);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Saller saller)
+        {
+            _sellerService.Insert(saller);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
