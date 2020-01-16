@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AppVendas.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppVendas.Services
 {
@@ -26,7 +27,7 @@ namespace AppVendas.Services
         }
         public Saller FindById(int id)
         {
-            return _context.Saller.FirstOrDefault(x => x.Id == id);
+            return _context.Saller.Include(obj=>obj.Departament).FirstOrDefault(x => x.Id == id);
         }
 
         public void Remove(int id)
