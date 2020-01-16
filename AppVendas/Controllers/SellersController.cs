@@ -61,7 +61,7 @@ namespace AppVendas.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int?id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -74,6 +74,24 @@ namespace AppVendas.Controllers
             }
 
             return View(obj);
+        }
+            public IActionResult Edit(int?id)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var obj = _sellerService.FindById(id.Value);
+
+                if (obj == null)
+                {
+                    return NotFound();
+                }
+            List<Departament> departaments = _departamentservice.FindAll();
+            SellerFormViewModel viewModel = new SellerFormViewModel { Saller = obj, Departaments = departaments };
+            return View(viewModel);
+
         }
     }
 }
