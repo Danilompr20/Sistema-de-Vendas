@@ -6,6 +6,8 @@ using AppVendas.Services;
 using Microsoft.AspNetCore.Mvc;
 using AppVendas.Models;
 using AppVendas.Models.ViewModels;
+using AppVendas.Services.Exceptions;
+using System.Diagnostics;
 
 namespace AppVendas.Controllers
 {
@@ -43,12 +45,12 @@ namespace AppVendas.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error),new { message = "Id não existente"});
             }
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não existente" });
             }
 
             return View(obj);
@@ -65,12 +67,12 @@ namespace AppVendas.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não existente" });
             }
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não existente" });
             }
 
             return View(obj);
@@ -79,19 +81,52 @@ namespace AppVendas.Controllers
             {
                 if (id == null)
                 {
-                    return NotFound();
-                }
+                return RedirectToAction(nameof(Error), new { message = "Id não existente" });
+            }
 
                 var obj = _sellerService.FindById(id.Value);
 
                 if (obj == null)
                 {
-                    return NotFound();
-                }
+                return RedirectToAction(nameof(Error),new { message = "Id não existente" });
+            }
             List<Departament> departaments = _departamentservice.FindAll();
             SellerFormViewModel viewModel = new SellerFormViewModel { Saller = obj, Departaments = departaments };
             return View(viewModel);
 
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id,Saller saller)
+        {
+            if(id != saller.Id)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não corresponde" });
+            }
+            try
+            {
+
+                _sellerService.Update(saller);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (NotFoundException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+            catch (DbConcurrencyException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+            return View(viewModel);
         }
     }
 }
