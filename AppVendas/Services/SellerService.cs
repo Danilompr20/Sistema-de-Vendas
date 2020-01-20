@@ -33,9 +33,16 @@ namespace AppVendas.Services
 
         public async Task RemoveAsync(int id)
         {
-            var x = await _context.Saller.FindAsync(id);
-            _context.Saller.Remove(x);
-           await  _context.SaveChangesAsync();
+            try
+            {
+                var x = await _context.Saller.FindAsync(id);
+                _context.Saller.Remove(x);
+                await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateException e)
+            {
+                throw new IntegrityException(e.Message);
+            }
         }
 
         public async Task UpdateAsync(Saller obj)
