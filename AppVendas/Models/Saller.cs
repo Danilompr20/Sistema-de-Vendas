@@ -9,16 +9,27 @@ namespace AppVendas.Models
     public class Saller
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Nome obrigatório")]
         public string Name { get; set; }
+
         [DataType(DataType.EmailAddress)]
+        [Required(ErrorMessage = "Nome obrigatório")]
+        [EmailAddress(ErrorMessage = "E-mail invalido")]
         public string Email { get; set; }
+
         [Display(Name = "Birth Date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString ="{0:dd/mm/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [Required(ErrorMessage = " Data Obrigatória")]
         public DateTime BirthDate { get; set; }
-        [Display(Name ="Base Salary")]
-        [DisplayFormat(DataFormatString ="{0:F2}")]
+
+        [Display(Name = "Base Salary")]
+        [DisplayFormat(DataFormatString = "{0:F2}")]
+        [Required(ErrorMessage = "Salario Obrigatório")]
+        [Range(100.0, 50000.0, ErrorMessage ="{0} deve ser entre{1} a {2}")]
         public double BaseSalary { get; set; }
+        
         public Departament Departament{ get; set; }
         public int DepartamentId { get; set; }
         public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();

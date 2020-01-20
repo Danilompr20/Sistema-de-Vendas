@@ -37,6 +37,12 @@ namespace AppVendas.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Saller saller)
         {
+            if (!ModelState.IsValid)
+            {
+                var departaments = _departamentservice.FindAll();
+                var viewModel = new SellerFormViewModel { Saller = saller, Departaments = departaments };
+                return View(viewModel);
+            }
             _sellerService.Insert(saller);
             return RedirectToAction(nameof(Index));
         }
@@ -99,7 +105,13 @@ namespace AppVendas.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id,Saller saller)
         {
-            if(id != saller.Id)
+            if (!ModelState.IsValid)
+            {
+                var departaments = _departamentservice.FindAll();
+                var viewModel = new SellerFormViewModel { Saller = saller, Departaments = departaments };
+                return View(viewModel);
+            }
+            if (id != saller.Id)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não corresponde" });
             }
